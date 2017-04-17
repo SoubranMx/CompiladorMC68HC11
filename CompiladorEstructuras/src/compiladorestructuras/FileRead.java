@@ -9,7 +9,7 @@ public class FileRead {
     private Scanner s;
     private String archivo;
     private List<List<String>> guardaCodigo;    //cada indice es una linea de codigo. Se accede a cada linea con guardaCodigo.get(x)
-    private List<String> code;                  //0 tabuladores o variables / 1- mnemonico o directiva / 3- direcciones o instrucciones / 4- Comentarios (de haberlos en la misma linea)
+    private List<String> code;                  //0-tabuladores o variables / 1- mnemonico o directiva / 3- direcciones o instrucciones / 4- Comentarios (de haberlos en la misma linea)
     private int n_lineas;
     
     public String palabra;
@@ -115,7 +115,6 @@ public class FileRead {
     public void fileR(){
         ArrayList<String> nemo = new ArrayList<String>();
         int enteroByte = 0,i=0,swch;
-        
         try{
             FileReader f = new FileReader(archivo);
             enteroByte = f.read();
@@ -228,4 +227,9 @@ public class FileRead {
     public int getNLineas(){
         return n_lineas;
     };
+    
+    public void mainMethod(){
+        cuentaLineas();
+        fileR();
+    }
 }
