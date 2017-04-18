@@ -32,7 +32,7 @@ public class FileRead {
     //METODOS
     private void cuentaLineas(){
         // Pide el nombre del archivo, lo guarda, abre un FileReader llamado archi y cuenta lineas hasta que encuentra 13, que es el ascii del enter
-        //el tab es un 9 ascii, 13 10 enter, 32 space
+        //el tab es un 09 ascii, 13 10 enter, 32 space
         int Byte, n_lin=0, pal = 0;
         try{
             //el tab es un 9 ascii, 13 10 enter, 32 space, 42 asterisco
@@ -42,30 +42,25 @@ public class FileRead {
             Byte = archi.read();
             while(Byte!=-1){
                 if(Byte != 42 && Byte != 13){
+                    if(Byte == 32){
                         while(Byte == 32 || Byte == 9)
                             Byte = archi.read();
                         pal++;
-                        while(Byte!=13){
-                            while(Byte == 32 || Byte == 9)
+                    }
+                    while(Byte!=13 && Byte!=-1){
+                        while(Byte == 32 || Byte == 9)
+                            Byte = archi.read();
+                        if(Byte != 42){
+                            while(Byte != 32 && Byte != 9 && Byte != 13 && Byte != -1)
                                 Byte = archi.read();
-                            //pal++;
-                            if(Byte != 42){
-                                while(Byte != 32 && Byte != 9 && Byte != 13 )
-                                    Byte = archi.read();
-                                pal++;
-                                /*if(Byte == 32 || Byte == 9)
-                                    while(Byte == 32 || Byte == 9)
-                                        Byte = archi.read();
-                                while(Byte != 32 && Byte != 9 && Byte != 13 )
-                                    Byte = archi.read();
-                                pal++;*/
-                            }
-                            else{
-                                while(Byte != 13)
-                                    Byte = archi.read();
-                                pal++;
-                            }
+                            pal++;
                         }
+                        else{
+                            while(Byte != 13)
+                                Byte = archi.read();
+                            pal++;
+                        }
+                    }
                 }
                 else if (Byte == 42){
                     while(Byte != 13)
@@ -81,8 +76,6 @@ public class FileRead {
             }
             n_lin++;
             n_lineas = n_lin;
-            //System.out.println("Lineas: "+n_lineas);
-            //setNLin(n_lin);
             archi.close();
         }catch(IOException e){
             System.out.println(e);
@@ -91,7 +84,7 @@ public class FileRead {
     
     private void addElementoH (ArrayList<String> mne){  //H es Horizontal
         int i;
-        this.guardaCodigo.add(mne);
+        guardaCodigo.add(mne);
     };
     public int unElemento(int eByte,ArrayList<String>nemu,FileReader f){
         try{
