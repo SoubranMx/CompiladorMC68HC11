@@ -42,26 +42,45 @@ public class FileRead {
             Byte = archi.read();
             while(Byte!=-1){
                 if(Byte != 42 && Byte != 13){
-                    if(Byte == 32 || Byte == 9){
                         while(Byte == 32 || Byte == 9)
                             Byte = archi.read();
+                        pal++;
                         while(Byte!=13){
-                            pal++;
-                            while(Byte != 32 && Byte != 9 && Byte != 13 )
+                            while(Byte == 32 || Byte == 9)
                                 Byte = archi.read();
+                            //pal++;
+                            if(Byte != 42){
+                                while(Byte != 32 && Byte != 9 && Byte != 13 )
+                                    Byte = archi.read();
+                                pal++;
+                                /*if(Byte == 32 || Byte == 9)
+                                    while(Byte == 32 || Byte == 9)
+                                        Byte = archi.read();
+                                while(Byte != 32 && Byte != 9 && Byte != 13 )
+                                    Byte = archi.read();
+                                pal++;*/
+                            }
+                            else{
+                                while(Byte != 13)
+                                    Byte = archi.read();
+                                pal++;
+                            }
                         }
-                    }
                 }
                 else if (Byte == 42){
                     while(Byte != 13)
                         Byte = archi.read();
+                    Byte = archi.read();    //En este punto, Byte es 13, uno mas es 10
                 }
-                //if(Byte == 13)
+                if(Byte == 13)
+                    Byte = archi.read();
                 n_lin++;
                 Byte = archi.read();    //Siguiente linea
                 n_palabras.add(pal);    //cada localidad será una linea del codigo de forma n-1, get(x) me dará el numero de palabras en cada linea
+                pal = 0;
             }
             n_lin++;
+            n_lineas = n_lin;
             //System.out.println("Lineas: "+n_lineas);
             //setNLin(n_lin);
             archi.close();
@@ -206,7 +225,8 @@ public class FileRead {
         }
     }
     
-    public int addRepetido(int x, String palabra,int enteroByte, FileReader f, ArrayList<String>nemr){
+    public int addRepetido(int x, String palabra,int enteroByte, FileReader f, ArrayList<String> nemr){
+        // Use esto para evitar usar más codigo en fileR.
         int i;
         try{
             while(enteroByte == 9 || enteroByte == 32)  //me aseguro que enteroByte pase a la siguiente palabra o llegue a un enter
@@ -228,8 +248,10 @@ public class FileRead {
         return n_lineas;
     };
     
+    
     public void mainMethod(){
         cuentaLineas();
-        fileR();
+        System.out.println(n_palabras);
+        //fileR();
     }
 }
