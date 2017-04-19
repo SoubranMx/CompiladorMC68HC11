@@ -11,6 +11,7 @@ public class FileRead {
     private List<List<String>> guardaCodigo;    //cada indice es una linea de codigo. Se accede a cada linea con guardaCodigo.get(x)
     private List<String> code;                  //0-tabuladores o variables / 1- mnemonico o directiva / 3- direcciones o instrucciones / 4- Comentarios (de haberlos en la misma linea)
     private int n_lineas;
+    //private int eByte;
     
     public String palabra;
     public List<Integer> n_palabras;   // cuenta las palabras por linea
@@ -18,6 +19,7 @@ public class FileRead {
     //CONSTRUCTOR
     public FileRead(){
         int i;
+        //eByte=0;
         n_lineas = 0;
         archivo = "";
         guardaCodigo = new ArrayList<List<String>>();   //Crea [0][x]
@@ -40,12 +42,17 @@ public class FileRead {
             archivo = s.nextLine();
             FileReader archi = new FileReader(archivo);
             Byte = archi.read();
+            // Pal tomara valores de acuerdo al numero de "palabras". Máximo 4. 0 = espacios vacios, enters, en sola linea. 1= comentarios completos de una linea (en cualquier parte de la linea), etiquetas, etc.
             while(Byte!=-1){
                 if(Byte != 42 && Byte != 13){
                     if(Byte == 32){
                         while(Byte == 32 || Byte == 9)
                             Byte = archi.read();
-                        pal++;
+                        if(Byte == 42)
+                            while(Byte!=13)
+                                Byte = archi.read();
+                        else if(Byte!=13)    //Esto asegura que hay algo escrito aparte de espacios. Puede que los espacios en blanco del .asc hayan "trampas". Bug fixed.
+                            pal++;
                     }
                     while(Byte!=13 && Byte!=-1){
                         while(Byte == 32 || Byte == 9)
@@ -66,6 +73,7 @@ public class FileRead {
                     while(Byte != 13)
                         Byte = archi.read();
                     Byte = archi.read();    //En este punto, Byte es 13, uno mas es 10
+                    pal++;
                 }
                 if(Byte == 13)
                     Byte = archi.read();
@@ -82,141 +90,206 @@ public class FileRead {
         }
     };
     
-    private void addElementoH (ArrayList<String> mne){  //H es Horizontal
-        int i;
-        guardaCodigo.add(mne);
+    private void addElementoH (List<String> pal){  //H es Horizontal, mete cada linea de codigo a guardaCodigo -> [espacios][Directiva][Instruccion][Comentario]
+        guardaCodigo.add(pal);
     };
-    public int unElemento(int eByte,ArrayList<String>nemu,FileReader f){
-        try{
-            if(eByte == 32 || eByte == 9){    //Hay un espacio o tabulador al principio
-                nemu.add(0,"0");
-            }
-            else{
-                while(eByte != 9 && eByte != 32 && eByte != 13){     //concatena la palabra que encuentre hasta que haya un espacio
-                    palabra = palabra.concat(""+(char)eByte);
-                    eByte = f.read();
-                }
-                //en este enteroByte debe ser un enter
-                nemu.add(0,palabra);    //matriz[0][i] = palabra;
-                eByte = addRepetido(1,palabra, eByte, f, nemu);    //Solo es un elemento, guarda lo demas en 0
-                /*if(eByte == 13){       //enter es 13 10, enteroByte en este punto es 13
-                    eByte = f.read();      //enteroByte en este punto es 10
-                    eByte = f.read();      //enteroByte en este punto debe ser nueva linea
-                }*/
-                /*else{
-                    //error
-                }*/
-            }
-            palabra = "";
-        }
-        catch(IOException e){
-            System.out.println(e);
-        }
-        return eByte;
-    };
-    /*public int dosElemento(){
-        return eByte;
-    };
-    public int tresElemento(){
-        return eByte;
-    };
-    public int cuatroElemento(){
-        return eByte;
-    };*/
     
-    public void fileR(){
-        ArrayList<String> nemo = new ArrayList<String>();
-        int enteroByte = 0,i=0,swch;
+    public int unElemento(int eByte,FileReader f, List<String> pal){   //Puede ser que contenga una etiqueta (debe ir pegada al margen) o comentarios (en cualquier lugar)
+        //String palabra = "";
         try{
-            FileReader f = new FileReader(archivo);
-            enteroByte = f.read();
-            while(enteroByte!=-1){
-                swch = n_palabras.get(i);
-                switch(i){
-                    case 1:
-                        enteroByte = unElemento(enteroByte,nemo,f);
-                        break;
-                    /*case 2:
-                        enteroByte = dosElemento(enteroByte,nemo,f);
-                        break;
-                    case 3:
-                        enteroByte = tresElemento(enteroByte,nemo,f);
-                        break;
-                    case 4:
-                        enteroByte = cuatroElemento(enteroByte,nemo,f);
-                        break;*/
-                }
-                i++;
+            while(eByte != 13){
+                palabra = palabra.concat((char)eByte+"");
+                eByte = f.read();
             }
-            
-            
-            
-            //  **** Para matriz [0][x] *****
-                /*if(enteroByte == 32 || enteroByte == 9){    //Hay un espacio o tabulador al principio
-                    nemo.add(0,"0");      //equivale a matriz[i][0] = "0";
-                }
-                else if (enteroByte !=42) {     //Se asegura que no es un tabulador, ni un asterisco al principio
-                    if(enteroByte != 13){
-                        while(enteroByte != 9 || enteroByte != 32){     //concatena la palabra que encuentre hasta que haya un espacio
-                            palabra = palabra.concat(""+(char)enteroByte);
-                            enteroByte = f.read();
-                        }
-                        //enteroByte debe ser un espacio o enter
-                        nemo.add(0,palabra);    //matriz[0][i] = palabra;
-                        enteroByte = addRepetido(1,palabra, enteroByte, f, nemo);    //Solo es un elemento, guarda lo demas en 0
-                    }
-                    else{       //enter es 13 10, enteroByte en este punto es 13
-                        enteroByte = f.read();      //enteroByte en este punto es 10
-                        enteroByte = f.read();      //enteroByte en este punto debe ser nueva linea
-                    }
-                }
-//                else if(enteroByte == 42){  //Existe un comentario al principio de la linea, no se tomara en cuenta
-                palabra = "";
-            //En este punto, ya se tiene un elemento en la posicion 0 de nemo
-            
-            
-            
-//          ******* Para matriz[1][x] *******
-                while(enteroByte != 9 || enteroByte != 32){
-                    palabra = palabra.concat(""+(char)enteroByte);
-                    enteroByte = f.read();
-                }
-                nemo.add(1,palabra);    //matriz[1][i] = palabra;
-                enteroByte = addRepetido(2,palabra, enteroByte, f, nemo);    //2 elementos
-                palabra = "";
-                // ******* Para matriz[2][x] ****
-                while(enteroByte != 9 || enteroByte != 32){
-                    palabra = palabra.concat(""+(char)enteroByte);
-                    enteroByte = f.read();
-                }
-                nemo.add(2,palabra);    //matriz[1][i] = palabra;
-                enteroByte = addRepetido(3,palabra, enteroByte, f, nemo);    //3 elementos
-                palabra = "";
-            
-            
-            
-            
-            // ******* Para matriz[3][x] ****
-                if(enteroByte == 42){   //Es un comentario al final de la linea, se toma en cuenta
-                    while(enteroByte!=13){
-                        palabra = palabra.concat(""+(char)enteroByte);
-                        enteroByte = f.read();
-                    }
-                    nemo.add(3,palabra);
-                }
-                else{
-                    //error
-                }
-                //Ya se leyó toda la linea*/
-                
-            //}
-            System.out.println();
-            /*for(i=0;i<3;i++)
-               System.out.print(matriz[0][i]+i+"\t");*/
+            eByte = f.read();   //10
+            eByte = f.read();   //Sig. linea
+            //addCode(1,palabra);
+            palabra = palabra.toUpperCase();
+            pal.set(0,palabra);    // En la localidad 0 siempre estará la etiqueta o toooodo el comentario.
+            for(int i = 1; i<=3 ; i++)
+                pal.set(i,"0");
+            palabra = "";
         }catch(IOException e){
             System.out.println(e);
         }
-    }
+        return eByte;
+    };
+    
+    public int dosElemento(int eByte, FileReader f, List<String> pal){        // dos elementos solo son inherentes
+        try{
+            while(eByte == 32)
+                eByte = f.read();
+            while(eByte != 13){
+                palabra = palabra.concat((char)eByte+"");
+                eByte = f.read();
+            }
+            eByte = f.read();   //10
+            eByte = f.read();   //Sig. linea
+            palabra = palabra.toUpperCase();    //Convierte a MAYUSCULAS
+            pal.set(0,"0");
+            pal.set(1,palabra);
+            for(int i = 2; i<=3 ; i++)
+                pal.set(i,"0");
+            palabra = "";
+        }catch(IOException e){
+            System.out.println(e);
+        }
+        return eByte;
+    };
+    
+    public int tresElemento(int eByte, FileReader f, List<String> pal){      //Hay instrucciones, deben tener un space al principio: '   'ORG    $8000
+        int i;
+        try{
+            if(eByte == 32){    //'   'ORG    $8000
+                i=1;
+                while(eByte != 13){
+                    while(eByte == 32)
+                        eByte = f.read();
+                    while(eByte != 32 && eByte != 13){
+                        palabra = palabra.concat((char)eByte+"");
+                        eByte = f.read();
+                    }
+                    palabra = palabra.toUpperCase();
+                    pal.set(i,palabra);
+                    i++;
+                    palabra = "";
+                }
+                pal.set(0,"0");
+                pal.set(3,"0");
+            }
+            else{   //DDRD   EQU   $1009
+                i=0;
+                while(eByte != 13){
+                    while(eByte == 32)
+                        eByte = f.read();
+                    while(eByte != 32 && eByte != 13){
+                        palabra = palabra.concat((char)eByte+"");
+                        eByte = f.read();
+                    }
+                    palabra = palabra.toUpperCase();
+                    pal.set(i,palabra);
+                    i++;
+                    palabra = "";
+                }
+            }
+            eByte = f.read();   //10
+            eByte = f.read();   //Sig. linea
+            i=1;
+        }catch(IOException e){
+            System.out.println(e);
+        }
+        return eByte;
+    };
+    
+    public int cuatroElemento(int eByte, FileReader f, List<String> pal){
+        int i;
+        try{
+            if(eByte == 32){    //'   'ORG    $8000 *Coments
+                i=1;
+                while(eByte != 13){
+                    while(eByte == 32)
+                        eByte = f.read();
+                    if(eByte == 42){
+                        while(eByte != 13){
+                            palabra = palabra.concat((char)eByte+"");
+                            eByte = f.read();
+                        }
+                    }
+                    while(eByte != 32 && eByte != 42 && eByte != 13){
+                        palabra = palabra.concat((char)eByte+"");
+                        eByte = f.read();
+                    }
+                    palabra = palabra.toUpperCase();
+                    pal.set(i,palabra);
+                    i++;
+                    palabra = "";
+                }
+                eByte = f.read();   //10
+                eByte = f.read();   //Sig. linea
+                pal.set(0,"0");
+            }
+            else{
+                i=0;
+                while(eByte != 13){
+                    if(i!=3){
+                        while(eByte == 32)
+                            eByte = f.read();
+                        while(eByte != 32 && eByte != 42 && eByte != 13){
+                            palabra = palabra.concat((char)eByte+"");
+                            eByte = f.read();
+                        }
+                       /* palabra = palabra.toUpperCase();
+                        code.set(i,palabra);
+                        i++;
+                        palabra = "";*/
+                    }
+                    else{
+                        while(eByte != 13){
+                            palabra = palabra.concat((char)eByte+"");
+                            eByte = f.read();
+                        }
+                    }
+                    palabra = palabra.toUpperCase();
+                    pal.set(i,palabra);
+                    i++;
+                    palabra = "";
+                }
+                eByte = f.read();   //10
+                eByte = f.read();   //Sig. linea
+            }
+        }catch(IOException e){
+            System.out.println(e);
+        }
+        return eByte;
+    };
+    
+    public void fileR(){
+        int eByte = 0,i=0,swch,j;
+        ListaLigada LisL = new ListaLigada();
+       /**** Nodo pal = new Nodo();     ****/
+        List<String> pala = new ArrayList<String>();
+        for(i=0;i<=3;i++)
+            pala.add("");
+        try{
+            FileReader f = new FileReader(archivo);
+            eByte = f.read();
+            //while(enteroByte!=-1){
+            for(i=0;i<=40;i++){
+                swch = n_palabras.get(i);
+                switch(swch){
+                    case 1:
+                        eByte = unElemento(eByte,f,pala);
+                        break;
+                    case 2:
+                        eByte = dosElemento(eByte,f,pala);
+                        break;
+                    case 3:
+                        eByte = tresElemento(eByte,f,pala);
+                        break;
+                    case 4:
+                        eByte = cuatroElemento(eByte,f,pala);
+                        break;
+                    default:
+                        eByte = f.read();
+                        eByte = f.read();
+                        for(j=0;j<=3;j++)
+                            code.set(j,"0");
+                        break;
+                }
+                LisL.InsertarAlFinal(pala);
+                addElementoH(LisL.Extraer());
+            }
+            j=1;
+            for(i=0;i<=40;i++){
+                System.out.println((j++)+"  "+guardaCodigo.get(i));
+            }
+              //  i++;
+            //}
+            System.out.println();
+        }catch(IOException e){
+            System.out.println(e);
+        }
+    };
     
     public int addRepetido(int x, String palabra,int enteroByte, FileReader f, ArrayList<String> nemr){
         // Use esto para evitar usar más codigo en fileR.
@@ -235,7 +308,7 @@ public class FileRead {
             System.out.println(e);
         }
         return enteroByte;
-    };
+    };  //Ya no se usa?
 
     public int getNLineas(){
         return n_lineas;
@@ -245,6 +318,6 @@ public class FileRead {
     public void mainMethod(){
         cuentaLineas();
         System.out.println(n_palabras);
-        //fileR();
+        fileR();
     }
 }
