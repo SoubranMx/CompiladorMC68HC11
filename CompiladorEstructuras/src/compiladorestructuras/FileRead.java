@@ -35,7 +35,7 @@ public class FileRead {
     private void cuentaLineas(){
         // Pide el nombre del archivo, lo guarda, abre un FileReader llamado archi y cuenta lineas hasta que encuentra 13, que es el ascii del enter
         //el tab es un 09 ascii, 13 10 enter, 32 space
-        int Byte, n_lin=0, pal = 0;
+        int Byte, n_lin=0, pal;
         try{
             //el tab es un 9 ascii, 13 10 enter, 32 space, 42 asterisco
             System.out.println("Ingrese el nombre del archivo: ");
@@ -44,9 +44,10 @@ public class FileRead {
             Byte = archi.read();
             // Pal tomara valores de acuerdo al numero de "palabras". Máximo 4. 0 = espacios vacios, enters, en sola linea. 1= comentarios completos de una linea (en cualquier parte de la linea), etiquetas, etc.
             while(Byte!=-1){
+                pal = 0;
                 if(Byte != 42 && Byte != 13){
                     if(Byte == 32){
-                        while(Byte == 32 || Byte == 9)
+                        while(Byte == 32)
                             Byte = archi.read();
                         if(Byte == 42)
                             while(Byte!=13)
@@ -55,19 +56,19 @@ public class FileRead {
                             pal++;
                     }
                     while(Byte!=13 && Byte!=-1){
-                        while(Byte == 32 || Byte == 9)
+                        while(Byte == 32)
                             Byte = archi.read();
-                        if(Byte != 42){
-                            while(Byte != 32 && Byte != 9 && Byte != 13 && Byte != -1)
+                        if(Byte != 42 && Byte != 13){
+                            while(Byte != 32 && Byte != 13 && Byte != -1)
                                 Byte = archi.read();
                             pal++;
+                            /*else
+                                pal++;*/
                         }
-                        else{
+                        else if(Byte == 42){
                             while(Byte != 13 && Byte != -1)
                                 Byte = archi.read();
                                 pal++;
-                            else
-                                pal = 0;
                         }
                     }
                 }
@@ -77,17 +78,13 @@ public class FileRead {
                     Byte = archi.read();    //En este punto, Byte es 13, uno mas es 10
                     pal++;
                 }
-                else if(Byte == 13)
+                if(Byte == 13)
                     Byte = archi.read();
-                /*else{   //Hay cosas raras por ahi.
-                    pal = 0;
-                    while(Byte != 13 && Byte != -1)
-                        Byte = archi.read();
-                }*/
+                
                 n_lin++;
                 Byte = archi.read();    //Siguiente linea
                 n_palabras.add(pal);    //cada localidad será una linea del codigo de forma n-1, get(x) me dará el numero de palabras en cada linea
-                pal = 0;
+               // pal = 0;
             }
             n_lin++;
             n_lineas = n_lin;
@@ -102,19 +99,25 @@ public class FileRead {
     };
     
     public int unElemento(int eByte,FileReader f, List<String> pal){   //Puede ser que contenga una etiqueta (debe ir pegada al margen) o comentarios (en cualquier lugar)
-        //String palabra = "";
+        int siz;
         try{
-            while(eByte != 13){
+            while(eByte != 13 && eByte!=-1 && eByte != 32){
                 palabra = palabra.concat((char)eByte+"");
                 eByte = f.read();
             }
+            if(eByte == 32){
+                while(eByte!=13 && eByte != -1)
+                    eByte=f.read();
+            }
+            if(eByte == -1){
+                siz = palabra.length();
+                if(siz<3)
+                    palabra =   "";
+            }
             eByte = f.read();   //10
             eByte = f.read();   //Sig. linea
-            //addCode(1,palabra);
             palabra = palabra.toUpperCase();
             pal.set(0,palabra);    // En la localidad 0 siempre estará la etiqueta o toooodo el comentario.
-            for(int i = 1; i<=3 ; i++)
-                pal.set(i,"0");
             palabra = "";
         }catch(IOException e){
             System.out.println(e);
@@ -124,20 +127,42 @@ public class FileRead {
     
     public int dosElemento(int eByte, FileReader f, List<String> pal){        // dos elementos solo son inherentes
         try{
-            while(eByte == 32)
-                eByte = f.read();
-            while(eByte != 13){
-                palabra = palabra.concat((char)eByte+"");
-                eByte = f.read();
+            if(eByte==32){
+                while(eByte == 32)
+                    eByte = f.read();
+                while(eByte != 13){
+                    palabra = palabra.concat((char)eByte+"");
+                    eByte = f.read();
+                }
+                eByte = f.read();   //10
+                eByte = f.read();   //Sig. linea
+                palabra = palabra.toUpperCase();    //Convierte a MAYUSCULAS
+                pal.set(1,palabra);
+                palabra = "";
             }
-            eByte = f.read();   //10
+            else{
+                while(eByte != 13){
+                    while(eByte==32)
+                        eByte = f.read();
+                    while(eByte != 32 && eByte != 13){
+                        palabra = palabra.concat((char)eByte+"");
+                        eByte = f.read();
+                    }
+                    palabra = palabra.toUpperCase();    //Convierte a MAYUSCULAS
+                    pal.set(1,palabra);
+                    palabra = "";
+                }
+                eByte = f.read();   //10
+                eByte = f.read();   //Sig. linea
+                /*palabra = palabra.toUpperCase();    //Convierte a MAYUSCULAS
+                pal.set(1,palabra);
+                palabra = "";*/
+            }
+            /*eByte = f.read();   //10
             eByte = f.read();   //Sig. linea
             palabra = palabra.toUpperCase();    //Convierte a MAYUSCULAS
-            pal.set(0,"0");
             pal.set(1,palabra);
-            for(int i = 2; i<=3 ; i++)
-                pal.set(i,"0");
-            palabra = "";
+            palabra = "";*/
         }catch(IOException e){
             System.out.println(e);
         }
@@ -149,10 +174,10 @@ public class FileRead {
         try{
             if(eByte == 32){    //'   'ORG    $8000
                 i=1;
-                while(eByte != 13){
+                while(eByte != 13 && eByte != -1){
                     while(eByte == 32)
                         eByte = f.read();
-                    while(eByte != 32 && eByte != 13){
+                    while(eByte != 32 && eByte != 13 && eByte !=-1){
                         palabra = palabra.concat((char)eByte+"");
                         eByte = f.read();
                     }
@@ -161,18 +186,21 @@ public class FileRead {
                     i++;
                     palabra = "";
                 }
-                //pal.set(0,"0");
-                //pal.set(3,"0");
             }
             else{   //DDRD   EQU   $1009
                 i=0;
                 while(eByte != 13){
                     while(eByte == 32)
                         eByte = f.read();
-                    while(eByte != 32 && eByte != 13){
+                    while(eByte != 32 && eByte != 13 && eByte!=42){
                         palabra = palabra.concat((char)eByte+"");
                         eByte = f.read();
                     }
+                    if(eByte == 42)
+                        while(eByte!=13 && eByte!=-1){
+                        palabra = palabra.concat((char)eByte+"");
+                        eByte = f.read();
+                        }
                     palabra = palabra.toUpperCase();
                     pal.set(i,palabra);
                     i++;
@@ -196,24 +224,26 @@ public class FileRead {
                 while(eByte != 13){
                     while(eByte == 32)
                         eByte = f.read();
-                    if(eByte == 42){
-                        while(eByte != 13){
+                    if(eByte != 13){
+                        if(eByte == 42){
+                            while(eByte != 13){
+                                palabra = palabra.concat((char)eByte+"");
+                                eByte = f.read();
+                            }
+                        }
+                        while(eByte != 32 && eByte != 42 && eByte != 13){
                             palabra = palabra.concat((char)eByte+"");
                             eByte = f.read();
                         }
+                        palabra = palabra.toUpperCase();
+                        pal.set(i,palabra);
+                        i++;
+                        palabra = "";
                     }
-                    while(eByte != 32 && eByte != 42 && eByte != 13){
-                        palabra = palabra.concat((char)eByte+"");
-                        eByte = f.read();
-                    }
-                    palabra = palabra.toUpperCase();
-                    pal.set(i,palabra);
-                    i++;
-                    palabra = "";
                 }
                 eByte = f.read();   //10
                 eByte = f.read();   //Sig. linea
-                pal.set(0,"0");
+                //pal.set(0,"0");
             }
             else{
                 i=0;
@@ -254,11 +284,10 @@ public class FileRead {
             i=0;
             j=0;
             while(eByte!=-1){
-//            for(i=0;i<=149;i++){
                 swch = n_palabras.get(i++);
                 code = new ArrayList<String>();
                 for(j=0;j<=3;j++)
-                    code.add("0");
+                    code.add("");
                 
                 switch(swch){
                     case 1:
@@ -279,13 +308,11 @@ public class FileRead {
                         eByte = f.read();
                         eByte = f.read();
                         for(j=0;j<=3;j++)
-                            code.set(j,"0");
+                            code.set(j,"");
                         break;
                 }
-                //LisL.InsertarAlFinal(pala);
-                addElementoH(/*LisL.Extraer()*/code);
+                addElementoH(code);
                 System.out.println((i)+"  "+guardaCodigo.get(i-1));
-               // i++;
             }
             //}
             System.out.println();
@@ -301,7 +328,8 @@ public class FileRead {
     
     public void mainMethod(){
         cuentaLineas();
-        System.out.println(n_palabras);
+        for(int i=0;i<=n_palabras.size()-1;i++)
+            System.out.println((i+1)+"--"+n_palabras.get(i));
         fileR();
     }
 }
