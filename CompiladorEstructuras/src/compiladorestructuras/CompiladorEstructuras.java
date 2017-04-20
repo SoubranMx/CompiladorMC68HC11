@@ -16,6 +16,8 @@ public class CompiladorEstructuras {
         FileRead test = new FileRead();
         System.out.println("Test de FileRead");
         test.mainMethod();
+        nmemonicos mne = new nmemonicos();
+        mne.buscarOpcode();
        
     }
     

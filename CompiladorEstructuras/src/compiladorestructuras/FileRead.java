@@ -17,7 +17,7 @@ public class FileRead {
     public List<Integer> n_palabras;   // cuenta las palabras por linea
     
     //CONSTRUCTOR
-    public FileRead(){
+    /*public FileRead(){
         int i;
         //eByte=0;
         n_lineas = 0;
@@ -83,7 +83,7 @@ public class FileRead {
                     pal = 0;
                     while(Byte != 13 && Byte != -1)
                         Byte = archi.read();
-                }*/
+                }
                 n_lin++;
                 Byte = archi.read();    //Siguiente linea
                 n_palabras.add(pal);    //cada localidad será una linea del codigo de forma n-1, get(x) me dará el numero de palabras en cada linea
@@ -283,7 +283,7 @@ public class FileRead {
                         break;
                 }
                 //LisL.InsertarAlFinal(pala);
-                addElementoH(/*LisL.Extraer()*/code);
+                addElementoH(/*LisL.Extraer()code);
                 System.out.println((i)+"  "+guardaCodigo.get(i-1));
                // i++;
             }
@@ -292,7 +292,7 @@ public class FileRead {
         }catch(IOException e){
             System.out.println(e);
         }
-    };
+    };*/
 
     public int getNLineas(){
         return n_lineas;
@@ -300,8 +300,8 @@ public class FileRead {
     
     
     public void mainMethod(){
-        cuentaLineas();
-        System.out.println(n_palabras);
-        fileR();
+        //cuentaLineas();
+        //System.out.println(n_palabras);
+        //fileR();
     }
 }
