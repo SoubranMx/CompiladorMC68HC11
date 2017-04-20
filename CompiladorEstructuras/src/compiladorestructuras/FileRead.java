@@ -63,9 +63,11 @@ public class FileRead {
                             pal++;
                         }
                         else{
-                            while(Byte != 13)
+                            while(Byte != 13 && Byte != -1)
                                 Byte = archi.read();
-                            pal++;
+                                pal++;
+                            else
+                                pal = 0;
                         }
                     }
                 }
@@ -75,8 +77,13 @@ public class FileRead {
                     Byte = archi.read();    //En este punto, Byte es 13, uno mas es 10
                     pal++;
                 }
-                if(Byte == 13)
+                else if(Byte == 13)
                     Byte = archi.read();
+                /*else{   //Hay cosas raras por ahi.
+                    pal = 0;
+                    while(Byte != 13 && Byte != -1)
+                        Byte = archi.read();
+                }*/
                 n_lin++;
                 Byte = archi.read();    //Siguiente linea
                 n_palabras.add(pal);    //cada localidad será una linea del codigo de forma n-1, get(x) me dará el numero de palabras en cada linea
@@ -154,8 +161,8 @@ public class FileRead {
                     i++;
                     palabra = "";
                 }
-                pal.set(0,"0");
-                pal.set(3,"0");
+                //pal.set(0,"0");
+                //pal.set(3,"0");
             }
             else{   //DDRD   EQU   $1009
                 i=0;
@@ -218,10 +225,6 @@ public class FileRead {
                             palabra = palabra.concat((char)eByte+"");
                             eByte = f.read();
                         }
-                       /* palabra = palabra.toUpperCase();
-                        code.set(i,palabra);
-                        i++;
-                        palabra = "";*/
                     }
                     else{
                         while(eByte != 13){
@@ -245,70 +248,51 @@ public class FileRead {
     
     public void fileR(){
         int eByte = 0,i=0,swch,j;
-        ListaLigada LisL = new ListaLigada();
-       /**** Nodo pal = new Nodo();     ****/
-        List<String> pala = new ArrayList<String>();
-        for(i=0;i<=3;i++)
-            pala.add("");
         try{
             FileReader f = new FileReader(archivo);
             eByte = f.read();
-            //while(enteroByte!=-1){
-            for(i=0;i<=40;i++){
-                swch = n_palabras.get(i);
+            i=0;
+            j=0;
+            while(eByte!=-1){
+//            for(i=0;i<=149;i++){
+                swch = n_palabras.get(i++);
+                code = new ArrayList<String>();
+                for(j=0;j<=3;j++)
+                    code.add("0");
+                
                 switch(swch){
                     case 1:
-                        eByte = unElemento(eByte,f,pala);
+                        eByte = unElemento(eByte,f,code);
                         break;
                     case 2:
-                        eByte = dosElemento(eByte,f,pala);
+                        eByte = dosElemento(eByte,f,code);
                         break;
                     case 3:
-                        eByte = tresElemento(eByte,f,pala);
+                        eByte = tresElemento(eByte,f,code);
                         break;
                     case 4:
-                        eByte = cuatroElemento(eByte,f,pala);
+                        eByte = cuatroElemento(eByte,f,code);
                         break;
                     default:
+                        while(eByte!=13)
+                            eByte = f.read();
                         eByte = f.read();
                         eByte = f.read();
                         for(j=0;j<=3;j++)
                             code.set(j,"0");
                         break;
                 }
-                LisL.InsertarAlFinal(pala);
-                addElementoH(LisL.Extraer());
+                //LisL.InsertarAlFinal(pala);
+                addElementoH(/*LisL.Extraer()*/code);
+                System.out.println((i)+"  "+guardaCodigo.get(i-1));
+               // i++;
             }
-            j=1;
-            for(i=0;i<=40;i++){
-                System.out.println((j++)+"  "+guardaCodigo.get(i));
-            }
-              //  i++;
             //}
             System.out.println();
         }catch(IOException e){
             System.out.println(e);
         }
     };
-    
-    public int addRepetido(int x, String palabra,int enteroByte, FileReader f, ArrayList<String> nemr){
-        // Use esto para evitar usar más codigo en fileR.
-        int i;
-        try{
-            while(enteroByte == 9 || enteroByte == 32)  //me aseguro que enteroByte pase a la siguiente palabra o llegue a un enter
-                enteroByte = f.read();
-            if(enteroByte == 13){
-                for(i=x;i<=3;i++)
-                    nemr.add(x,"0");
-                enteroByte = f.read();      //10
-                enteroByte = f.read();      //Sig linea
-            }
-        }
-        catch(IOException e){
-            System.out.println(e);
-        }
-        return enteroByte;
-    };  //Ya no se usa?
 
     public int getNLineas(){
         return n_lineas;
