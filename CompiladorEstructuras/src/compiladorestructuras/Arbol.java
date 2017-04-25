@@ -7,6 +7,7 @@ public class Arbol {
  
     /* Atributos */
     private Nodo raiz;
+    //private int i;
  
     /* Contructores	*/
     public Arbol( List<String> valor ) {
@@ -27,56 +28,85 @@ public class Arbol {
     }
 	
 	// Metodos
-	private void addNodo( Nodo nodo, Nodo raiz ) {
-        /* 2.- Partiendo de la raíz preguntamos: Nodo == null ( o no existe ) ? */
-        if ( raiz == null ) {
-            /* 
-             * 3.- En caso afirmativo X pasa a ocupar el lugar del nodo y ya 
-             * hemos ingresado nuestro primer dato. 
-             * ==== EDITO =====
-             * Muchas gracias a @Espectro por la corrección de esta línea
-             */
-            this.setRaiz(nodo);
+    private void addNodo( Nodo nodo, Nodo raiz , int i ) {
+        char c1 = nodo.getDato().get(0).charAt(i);
+        
+        if(isEmpty()){
+            this.raiz = nodo;
         }
-        else {
-            /* 4.- En caso negativo preguntamos: X < Nodo */
-            if ( nodo.getDato().get(0).compareTo(raiz.getDato().get(0)) < 0 ) {	//get(0) obtiene el String del nemonico. 0 es igual, menor a 0 va a la izquierda, mayor a 0 va a la derecha.
-				/*
-				lexicographically es como se podria encontrar una palabra en un diccionario, por orden alfabético.
-				The value 0 if the argument is a string lexicographically equal to this string;
-				a value less than 0 if the argument is a string lexicographically greater than this string;
-				and a value greater than 0 if the argument is a string lexicographically less than this string.
-				*/
-                /* 
-                 * 5.- En caso de ser menor pasamos al Nodo de la IZQUIERDA del
-                 * que acabamos de preguntar y repetimos desde el paso 2 
-                 * partiendo del Nodo al que acabamos de visitar 
-                 */
-                if (raiz.getIzq() == null) {
+        else{
+            // comparar la letra
+            if(raiz.getDato().get(0).charAt(i) == c1){
+                // IZQUIERDA
+                if(raiz.getIzq()==null){
                     raiz.setIzq(nodo);
+                    raiz.getIzq().setPadre(raiz);
                 }
-                else {
-                    addNodo(nodo , raiz.getIzq() );
+                else{
+                    addNodo(nodo,raiz.getIzq(),++i);
                 }
             }
-            else {
-                /* 
-                 * 6.- En caso de ser mayor pasamos al Nodo de la DERECHA y tal
-                 * cual hicimos con el caso anterior repetimos desde el paso 2
-                 * partiendo de este nuevo Nodo.
-                 */
-                if (raiz.getDer() == null) {
+            else{
+                //DERECHA
+                if(raiz.getDer()==null){
                     raiz.setDer(nodo);
+                    raiz.getDer().setPadre(raiz);
                 }
-                else {
-                    addNodo( nodo, raiz.getDer() );
-                }
+                else
+                    addNodo(nodo,raiz.getDer(),0);
             }
         }
     }
  
-    public void addNodo( Nodo nodo ) {
-        this.addNodo( nodo , this.raiz );
+    public void addNodo( Nodo nodo, int x ) {
+        this.addNodo( nodo , this.raiz , x );
+    }
+    
+    public boolean isEmpty(){
+        return (raiz == null);
+    }
+    
+    private Nodo buscaNodo(Nodo nodo, Nodo raiz, int x, int i){
+        char c1 = nodo.getDato().get(x).charAt(i);
+        char c2 = raiz.getDato().get(0).charAt(i);
+        String s1 = nodo.getDato().get(x);
+        Nodo aux;
+        
+        if(isEmpty()){
+            aux = null;
+        }
+        else{
+            // comparar la letra
+            if(c2 == c1){
+                // RAIZ
+                if(raiz.getDato().get(0) == s1){
+                    aux = raiz;
+                }
+                else{
+                    // IZQUIERDA
+                    if(raiz.getIzq()==null){
+                        aux = null;
+                    }
+                    else{
+                        aux = buscaNodo(nodo,raiz.getIzq(),x,++i);
+                    }
+                }
+            }
+            else{
+                //DERECHA
+                if(raiz.getDer()==null){
+                    aux = null;
+                }
+                else{
+                    aux = buscaNodo(nodo,raiz.getDer(),x,0);
+                }
+            }
+        }
+        return aux;
     }
  
+    public Nodo buscaNodo(Nodo nodo, int x, int i){    //x es el lugar donde está la palabra ?  i es para el charAt
+        Nodo aux = buscaNodo(nodo, this.raiz , x , i);
+        return aux;
+    }
 }

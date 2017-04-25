@@ -13,9 +13,11 @@ public class CompiladorEstructuras {
     
     
     public static void main(String[] args) {
-        FileRead test = new FileRead();
-        System.out.println("Test de FileRead");
-        test.mainMethod();
+        //FileRead test = new FileRead();
+        //System.out.println("Test de FileRead");
+        //test.mainMethod();
+        Nmemonicos nem = new Nmemonicos();
+        nem.buscarOpcode();
        
     }
     
