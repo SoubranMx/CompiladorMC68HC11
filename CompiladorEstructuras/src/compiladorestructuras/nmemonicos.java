@@ -10,6 +10,7 @@ public class nmemonicos {
     private String [][] mnemonicos;
     public List<List<String>> provicional;
     public List <String> prov1;
+    private Object in;
     
     //CONSTRUCTOR
     public nmemonicos(){
@@ -177,8 +178,50 @@ public class nmemonicos {
          prov1.set(1, provicional.get(0).get(1));   //ORG
          prov1.set(2, provicional.get(0).get(2));   //$8000
          prov1.set(3, provicional.get(0).get(3));   //""
-         
-         if()
+    
+    //
+    int buscarprov = in.nextInt;     
+        
+    
+     
+        for(int filas=0; filas<mnemonicos.length; filas++){
+            for(int columnas=0; columnas < mnemonicos[filas].length; columnas++){
+                if(mnemonicos[filas][columnas]==buscarprov ){
+                    //?
+                else 
+                    for(int filas=0; filas<relativos.length; filas++){
+                        for(int columnas=0; columnas < relativos[filas].length; columnas++){
+                            if(relativos[filas][columnas]==buscarprov){
+                                //??
+                                else
+                                for(int filas=0; filas<inherentes.length; filas++){
+                                    for(int columnas=0; columnas<inherentes[filas].length; columnas++){
+                                        if(inherentes[filas][columnas]==buscarprov){
+                                            //???
+                                            else
+                                                for(int filas=0; filas<simbolos.length; filas++){
+                                                    for(int columnas=0; columnas<simbolos[filas].length; columnas++){
+                                                        if(simbolos[filas][columnas]==buscarprov){
+                                                         //????
+                                                         else
+                                                            //Sino esta en ningun arreglo, dependeria en que columna este la palabra a buscar para saber que hace?
+                                                        }
+                                                        
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
+                            }
+                         }
+                     }
+                                
+                }
+            }
+        
+        }
+        }
+    
          
         return;
     }
