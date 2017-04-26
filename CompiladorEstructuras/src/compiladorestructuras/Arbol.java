@@ -67,6 +67,7 @@ public class Arbol {
     }
     
     private Nodo buscaNodo(Nodo nodo, Nodo raiz, int x, int i){
+        // nodo a buscar / raiz / palabra  /  letra
         char c1 = nodo.getDato().get(x).charAt(i);
         char c2 = raiz.getDato().get(0).charAt(i);
         String s1 = nodo.getDato().get(x);

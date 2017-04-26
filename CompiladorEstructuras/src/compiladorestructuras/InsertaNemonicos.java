@@ -723,6 +723,24 @@ public class InsertaNemonicos{
 		MNE.add("7C");
 		aux = new Nodo(MNE);
 		mnemonicos.addNodo(aux,0);
+/*26*/		MNE = new ArrayList<String>();
+		MNE.add("JMP");
+		MNE.add("0");	//IMM
+		MNE.add("0");	//DIR
+		MNE.add("6E");	//IND
+		MNE.add("186E");//IND
+		MNE.add("7E");	//EXT	
+		aux = new Nodo(MNE);
+		mnemonicos.addNodo(aux,0);
+/*26*/		MNE = new ArrayList<String>();
+		MNE.add("JSR");
+		MNE.add("0");
+		MNE.add("9D");
+		MNE.add("AD");
+		MNE.add("18AD");
+		MNE.add("BD");
+		aux = new Nodo(MNE);
+		mnemonicos.addNodo(aux,0);
 /*27*/		MNE = new ArrayList<String>();
 		MNE.add("LDAA");
 		MNE.add("86");
