@@ -1,3 +1,4 @@
+
 package compiladorestructuras;
 import java.util.ArrayList;
 import java.util.*;
@@ -23,147 +24,147 @@ public class Nmemonicos {
 		
         provicional = new ArrayList<List<String>>();
         prov1 = new ArrayList<String>();
-        //  ORG $8000   
+//1        //  ORG $8000   
         prov1.add("0");
         prov1.add("ORG");
         prov1.add("$8000");
         prov1.add("0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //  LDAA    SCSR    
+//2        //  LDAA    SCSR    
         prov1.add(0,"0");
         prov1.add(1,"LDAA");
         prov1.add(2,"SCSR");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //       LDD   #$302C  * CONFIGURA PUERTO SERIAL
+//3        //       LDD   #$302C  * CONFIGURA PUERTO SERIAL
         prov1.add(0,"0");
         prov1.add(1,"LDD");
         prov1.add(2,"#$302C");
         prov1.add(3,"* CONFIGURA PUERTO SERIAL");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //  DDRD  EQU  $1009
+//4        //  DDRD  EQU  $1009
         prov1.add(0,"DDRD");
         prov1.add(1,"EQU");
         prov1.add(2,"$1009");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //  u1  equ  $0000
+//5        //  u1  equ  $0000
         prov1.add(0,"u1");
         prov1.add(1,"equ");
         prov1.add(2,"$0000");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      LDAA  #$04
+//6        //      LDAA  #$04
         prov1.add(0,"0");
         prov1.add(1,"LDAA");
         prov1.add(2,"#$04");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      clr  u4
+//7        //      clr  u4
         prov1.add(0,"0");
         prov1.add(1,"clr");
         prov1.add(2,"u4");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      ldaa  #'?
+//8        //      ldaa  #'?
         prov1.add(0,"0");
         prov1.add(1,"ldaa");
         prov1.add(2,"#'?");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      BNE  NO_ES_S
+//9        //      BNE  NO_ES_S
         prov1.add(0,"0");
         prov1.add(1,"BNE");
         prov1.add(2,"NO_ES_S");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      STAA  u1
+//10        //      STAA  u1
         prov1.add(0,"0");
         prov1.add(1,"STAA");
         prov1.add(2,"u1");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      BNE  BORRA
+//11        //      BNE  BORRA
         prov1.add(0,"0");
         prov1.add(1,"BNE");
         prov1.add(2,"BORRA");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        // BORRA
+//12        // BORRA
         prov1.add(0,"BORRA");
         prov1.add(1,"0");
         prov1.add(2,"0");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      RTI
+//13        //      RTI
         prov1.add(0,"0");
         prov1.add(1,"RTI");
         prov1.add(2,"0");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      FCB   $F1,$00
+//14        //      FCB   $F1,$00
         prov1.add(0,"0");
         prov1.add(1,"FCB");
         prov1.add(2,"$F1,$00");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //  RESET FCB  $80,$00
+//15        //  RESET FCB  $80,$00
         prov1.add(0,"RESET");
         prov1.add(1,"FCB");
         prov1.add(2,"$80,$00");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      JMP  INICIO
+//16        //      JMP  INICIO
         prov1.add(0,"0");
         prov1.add(1,"JMP");
         prov1.add(2,"INICIO");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      STAA  SCCR1  * 8 BITS
+//17        //      STAA  SCCR1  * 8 BITS
         prov1.add(0,"0");
         prov1.add(1,"STAA");
         prov1.add(2,"SCCR1");
         prov1.add(3,"* 8 BITS");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      TAP
+//18        //      TAP
         prov1.add(0,"0");
         prov1.add(1,"TAP");
         prov1.add(2,"0");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //ORDEN equ  $0004
+//19        //ORDEN equ  $0004
         prov1.add(0,"ORDEN");
         prov1.add(1,"equ");
         prov1.add(2,"$0004");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //      JMP  CHECA_S
+//20        //      JMP  CHECA_S
         prov1.add(0,"0");
         prov1.add(1,"JMP");
         prov1.add(2,"CHECA_S");
         prov1.add(3,"0");
         provicional.add(prov1);
         prov1 = new ArrayList<String>();
-        //HPRIO  EQU   $103C  *DECLARACION DE CONSTANTES
+//21        //HPRIO  EQU   $103C  *DECLARACION DE CONSTANTES
         prov1.add(0,"HPRIO");
         prov1.add(1,"EQU");
         prov1.add(2,"$103C");
@@ -176,15 +177,21 @@ public class Nmemonicos {
           /*int resultado=0;
           String palabra;*/
           Nodo aux,bN;
-          bN = new Nodo(provicional.get(9));    // ___ LDAA  SCSR   3 palabras
+          for(i=0; i<20; i++){
+          bN = new Nodo(provicional.get(i));    // ___ LDAA  SCSR   3 palabras
           aux = inherentes.buscaNodo(bN,1,0);
           if(aux == null){
               aux = relativos.buscaNodo(bN, 1, 0);
-              if(aux == null)
-                  aux = mnemonicos.buscaNodo(bN, 1, 0);
+              if(aux == null){
+                    aux = mnemonicos.buscaNodo(bN, 1, 0);
+                    ///uriel
+                    if(aux == null)
+                    aux= variables.buscaNodo(bN, x, i);
+                    //// uriel
+              }
           }
           System.out.println("nmemonicos");
-          
+          }
           
           
          /*
