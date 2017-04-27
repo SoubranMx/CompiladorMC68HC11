@@ -80,7 +80,7 @@ public class Arbol {
             // comparar la letra
             if(c2 == c1){
                 // RAIZ
-                if(raiz.getDato().get(0) == s1){
+                if(raiz.getDato().get(0).compareTo(s1) == 0){
                     aux = raiz;
                 }
                 else{
@@ -111,75 +111,4 @@ public class Arbol {
         return aux;
     }
 
-    private void addNodoLexico(Nodo nodo, Nodo raiz, int i){
-        char c1 = nodo.getDato().get(0).charAt(i);
-        String snodo = nodo.getDato().get(0);   //VAR xEQUx VAL
-        String rnodo = raiz.getDato().get(0);
-        Nodo aux;
-        if(isEmpty()){
-            this.raiz = nodo;
-        }
-        else{
-            if(rnodo.charAt(0) == snodo.charAt(0)){ //Entra un ABC y había un ADD
-                //Va a la izquierda
-                if(snodo.compareTo(rnodo)<0){   //snodo es lexicograficamente menor, viene antes en el diccionario... Va a la izquierda.
-                    if(raiz.getDato().get(0).charAt(i) == c1){
-                        // IZQUIERDA
-                        if(raiz.getIzq()==null){
-                            raiz.setIzq(nodo);
-                            raiz.getIzq().setPadre(raiz);
-                        }
-                        else
-                            addNodo(nodo,raiz.getIzq(),++i);
-                    }
-                }
-                else if(snodo.compareTo(rnodo)>0){
-                    //Va a la derecha
-                    //DERECHA
-                    if(raiz.getDer()==null){
-                        raiz.setDer(nodo);
-                        raiz.getDer().setPadre(raiz);
-                    }
-                    else
-                        addNodo(nodo,raiz.getDer(),0);
-                }
-                else{
-                    //
-                }
-            }
-            else{   //Entra un ABC y había un XBD o al revés.   Hay que recorrer el árbol y añadir el que esté primero al principio.
-                if(snodo.compareTo(rnodo)<0){    // entra abc y habia un dcb
-                
-                }
-            }
-            
-            
-            
-            
-            
-            // comparar la letra
-            if(raiz.getDato().get(0).charAt(i) == c1){
-                // IZQUIERDA
-                if(raiz.getIzq()==null){
-                    raiz.setIzq(nodo);
-                    raiz.getIzq().setPadre(raiz);
-                }
-                else{
-                    addNodo(nodo,raiz.getIzq(),++i);
-                }
-            }
-            else{
-                //DERECHA
-                if(raiz.getDer()==null){
-                    raiz.setDer(nodo);
-                    raiz.getDer().setPadre(raiz);
-                }
-                else
-                    addNodo(nodo,raiz.getDer(),0);
-            }
-        }
-    }
-    public void addNodoLexico(Nodo nodo, int x){
-        this.addNodoLexico(nodo,this.raiz,x);
-    }
 }
