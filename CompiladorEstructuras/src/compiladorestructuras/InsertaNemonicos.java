@@ -491,11 +491,11 @@ public class InsertaNemonicos{
 		List<String> MNE = new ArrayList<String>();
 		Nodo aux;
 /*1*/		MNE.add("ADCA");
-		MNE.add("89");
-		MNE.add("99");
-		MNE.add("A9");
-		MNE.add("18A9");
-		MNE.add("B9");
+		MNE.add("89");	//imm	1
+		MNE.add("99");	//dir	2
+		MNE.add("A9");	//indx	3
+		MNE.add("18A9");//indy	4
+		MNE.add("B9");	//ext	5
 		mnemonicos = new Arbol(MNE);
 		
 /*2*/		MNE = new ArrayList<String>();
