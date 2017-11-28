@@ -327,11 +327,13 @@ public class FileRead {
     
     
     public void mainMethod(){
-        //nmemonicos mne = new nmemonicos();
+        Nmemonicos mne;
         cuentaLineas();
         for(int i=0;i<=n_palabras.size()-1;i++)
             System.out.println((i+1)+"--"+n_palabras.get(i));
         fileR();
+        mne = new Nmemonicos(guardaCodigo,n_palabras,archivo);
+        mne.mainMethod();
         System.out.println();
         //mne.buscarOpcode(guardaCodigo,n_palabras);
     }
